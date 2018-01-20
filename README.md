@@ -29,7 +29,9 @@ In Live-CD open terminal wit `ctrl + alt + t`
 
 ## prepare grub efi
 
-1. Download the `grub.sh` together with `grub.cfg` script.
+Still in Live-CD...
+
+1. Download the `grub.sh`, `grub.cfg` together with `post.sh` script in same folder.
 2. Make sure that your usb-stick is device `/dev/sda` and mounted under `/media/lubuntu/GRUB2EFI`.
    - If this is not the case edit the `grub.sh` script.
 3. Run `sh grub.sh` from the terminal.
@@ -44,6 +46,7 @@ In Live-CD open terminal wit `ctrl + alt + t`
   │       ├── bootx64.efi
   │       └── grub.cfg
   ├── grub-i386-pc.txz
+  ├── post.sh
   └── iso
       └── lubuntu-17.10.1-desktop-i386.iso
   ````
@@ -70,13 +73,10 @@ In Live-CD open terminal wit `ctrl + alt + t`
    - Note down the device name lubuntu gets installed. E.g. `/dev/sda3`
    - Run the installer - it will stop with an error stating that grub can`t be installed
    - Do **NOT shutdown** the computer.
-3. Download the `post.sh` script.
+3. Grub bootloader installation using `post.sh` script.
    - Check your partitions first with `sudo fdisk -l /dev/sda`
-   - Make sure your Linux filesystem is at `/dev/sda3`. If this is not the case open `post.sh` and change the line `linux=${disk}3` accordingly.
-   - Run `sh post.sh mount` to mount your partitions
-   - Then `sh post.sh install` to reinstall grub
-   - Exit with `exit`
-   - Then run `sh post.sh unmount` and reboot.
+   - Make sure your Linux filesystem is at `/dev/sda3`. If this is not the case edit `post.sh` and change the line `linux=${disk}3` accordingly. Use `cp /isodevice/post.sh .`
+   - Run `sh /isodevice/post.sh install`
 
 ## License
 
