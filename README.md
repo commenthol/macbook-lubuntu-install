@@ -1,4 +1,4 @@
-# Lubuntu install on old Macbook2
+# Lubuntu install on white Macbook
 
 This tutorial aims to install a Lubuntu 17.10 on a Macbook3,1 using live CD via usb-stick.
 My major problem was running the desktop 32bit ISO which does not fit on a CD. This may also work on an old MacMini1,1
