@@ -1,13 +1,13 @@
 # Lubuntu install on old Macbook2
 
-This tutorial aims to install a Lubuntu 17.10 on a Macbook2 using live CD via usb-stick.
-My major problem was running the desktop 32bit ISO which does not fit on a CD. This may also work on an old Mac-Mini...
+This tutorial aims to install a Lubuntu 17.10 on a Macbook3,1 using live CD via usb-stick.
+My major problem was running the desktop 32bit ISO which does not fit on a CD. This may also work on an old MacMini1,1
 
 ## requisites
 
 - VM Host http://virtualbox.org
 - Live Lubuntu ISO Image
-- USB-Stick ~ 2GB
+- USB-Stick >= 2GB
 
 ## start live CD
 
@@ -44,11 +44,11 @@ Still in Live-CD...
   ├── EFI
   │   └── BOOT
   │       ├── bootx64.efi
+  │       ├── bootia32.efi
   │       └── grub.cfg
-  ├── grub-i386-pc.txz
-  ├── post.sh
-  └── iso
-      └── lubuntu-17.10.1-desktop-i386.iso
+  ├── iso
+  │   └── lubuntu-17.10.1-desktop-i386.iso
+  └── post.sh
   ````
 
 ## macbook2 prepare
@@ -62,7 +62,7 @@ Still in Live-CD...
 4. Shutdown OSX
 5. Insert usb-stick in macbook and boot holding the `alt` key.
 6. Select the "EFI Boot" with USB-Icon (right-most)
-7. Boot into Live CD - this may take some time...
+7. Boot into Live CD - this may take some time... make credit to USB1
 
 ## install Lubuntu
 
@@ -77,6 +77,32 @@ Still in Live-CD...
    - Check your partitions first with `sudo fdisk -l /dev/sda`
    - Make sure your Linux filesystem is at `/dev/sda3`. If this is not the case edit `post.sh` and change the line `linux=${disk}3` accordingly. Use `cp /isodevice/post.sh .`
    - Run `sh /isodevice/post.sh install`
+
+## postinstall
+
+- Install additional drivers...
+  - Broadcom Wifi
+  - Intel Microcode
+- You may change the default behavior for function keys
+  - See details https://help.ubuntu.com/community/AppleKeyboard
+  - TLTR
+    ```bash
+    echo options hid_apple fnmode=2 | sudo tee -a /etc/modprobe.d/hid_apple.conf
+    sudo update-initramfs -u -k all
+    ```
+- isight http://bersace03.free.fr/ift/
+  ```bash
+  sudo apt install isight-firmware-tools
+  # mount Macintosh HD from file manager
+  sudo ift-extract -a /media/$USER/Macintosh\ HD/System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/AppleUSBVideoSupport.kext/Contents/MacOS/AppleUSBVideoSupport
+  ```
+- There is an issue with [drm:drm_atomic_helper_commit_cleanup_done [drm_kms_helper]] *ERROR* [CRTC:26:pipe A] flip_done timed out in `dmesg`
+  - check https://bbs.archlinux.org/viewtopic.php?pid=1689914#p1689914
+  - in `/etc/default/grub` add
+    ```bash
+    GRUB_CMDLINE_LINUX_DEFAULT="acpi_osi=Linux acpi_backlight=vendor video=SVIDEO-1:d"
+    ```
+    then run `update-grub`
 
 ## License
 
